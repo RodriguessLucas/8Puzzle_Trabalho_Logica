@@ -11,8 +11,6 @@ g = Glucose3()
 def addClasulasEmGlucose(lista):
    contador = 0
    for clasula in lista:
-      print(clasula, end= "  -")
-      print("clasula {}".format(contador))
       contador+=1
       g.add_clause(clasula)
       
@@ -52,25 +50,27 @@ def gerarListaClasulasPeloMenosUm(dicionarioClasulas):
 
 
 #arrumar o de ser p ^ -p 
-def gerarListaClasulasSoPodeUm(dicionarioClasulas):
-   listaClasulas = []
-   for i in range(TAMANHO_MAXIMO):
-        for j in range(TAMANHO_MAXIMO):
-           auxClasula = []
-           for k in range(VALOR_MAXIMO):
-                auxChaveEncontrar = "1_P_{}_{}_{}".format(i+1,j+1,k)
-                auxValorClasula = dicionarioClasulas[auxChaveEncontrar]
-                auxClasula.append(auxValorClasula)
-           listaClasulas.append(auxClasula)
-            
-   addClasulasEmGlucose(listaClasulas)
-
-            
-
-
+def gerarListaClasulasSoPodeUm(clasulas):
+    listaNovasClasulas = []
+    tamanhoClasula = len(clasulas[0])
+    
+    if(tamanhoClasula <=0):
+       print("Erro, lista de clasulas está vazia")
+       return -1
+    
+    for i in range(len(clasulas)):
+        for j in range(tamanhoClasula):
+            for k in range(j+1,tamanhoClasula):
+                var1 = clasulas[i][j] * -1
+                var2 = clasulas[i][k] * -1
+                listaNovasClasulas.append([var1,var2])
+    
+    addClasulasEmGlucose(listaNovasClasulas)      
+    return listaNovasClasulas         
+      
         
 
-
+            
 
 
 
@@ -116,7 +116,20 @@ listaPodeTerUmValor = gerarListaClasulasPeloMenosUm(dicionarioClasulasPassoUm)
 #gerar clasulas que para cada quadrado do 8 puzzle so pode ter exclusivamente um valor
 listaPodeSoUmValor = gerarListaClasulasSoPodeUm(listaPodeTerUmValor)
 
-#
+
+print("----------------------------------------------------")
+print("Impimindo as clasulas de so pode ter um valor")
+for aa in listaPodeTerUmValor:
+   print(aa)
+print("----------------------------------------------------")
+
+
+print("----------------------------------------------------")
+print("Impimindo as clasulas de so pode ter um valor")
+for aa in listaPodeSoUmValor:
+   print(aa)
+print("----------------------------------------------------")
+
 
 
 
