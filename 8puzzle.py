@@ -1,7 +1,7 @@
 from pysat.solvers import Glucose3
 
 #deixando os tamanhos maximos de tabuleiro e do valor usado
-VALOR_MAXIMO = 8
+VALOR_MAXIMO = 9
 TAMANHO_MAXIMO = 3
 
 #instancia o glucose(vazio)
@@ -44,7 +44,6 @@ def gerarListaClasulasPeloMenosUm(dicionarioClasulas):
                 auxClasula.append(auxValorClasula)
            listaClasulas.append(auxClasula)
             
-   addClasulasEmGlucose(listaClasulas)
    return listaClasulas
 
 
@@ -111,8 +110,11 @@ dicionarioClasulasPassoUm = gerarDictClasulaVariavel(1)
 #imprimi
 imprimir_dicionario_linha_a_linha(dicionarioClasulasPassoUm)
 
-#gerar clasulas que para cara quadrado do 8 puzzle pode ter um valor
+#gerar clasulas que para cada quadrado do 8 puzzle pode ter um valor
 listaPodeTerUmValor = gerarListaClasulasPeloMenosUm(dicionarioClasulasPassoUm)
+
+#gerar clasulas que para cada quadrado do 8 puzzle so pode ter exclusivamente um valor
+listaPodeSoUmValor = gerarListaClasulasSoPodeUm(listaPodeTerUmValor)
 
 #
 
