@@ -63,8 +63,8 @@ def gerarListaClasulasSoPodeUm(clasulas):
     tamanhoClasula = len(clasulas[0])
     
     if(tamanhoClasula <=0):
-       print("Erro, lista de clasulas está vazia")
-       return -1
+      print("Erro, lista de clasulas está vazia")
+      return -1
     
     for i in range(len(clasulas)):
         for j in range(tamanhoClasula):
@@ -91,7 +91,23 @@ def gerarListaClasulasValorDeveAssumirUm(dicionario):
   return listaClasulasNovas
       
 
+# funcao para definir que cada valor so pode assumir um quadrado apenas
+def gerarListaClasulasSoPodeUmTabuleiro(clasulas):
+  listaNovasClasulas = []
+  tamanhoClasula = len(clasulas[0])
 
+  if(tamanhoClasula <= 0):
+    print("Erro, lista de clasulas está vazia")
+    return -1
+  
+  for i in range(len(clasulas)):
+        for j in range(tamanhoClasula):
+            for k in range(j+1,tamanhoClasula):
+                var1 = clasulas[i][j] * -1
+                var2 = clasulas[i][k] * -1
+                listaNovasClasulas.append([var1,var2])
+         
+  return listaNovasClasulas     
             
 
 
@@ -133,6 +149,7 @@ def imprimir_dicionario_linha_a_linha(meu_dicionario):
 
 
 
+
 #PARA O PASSO 1
 
 # gera o dicionario passo1
@@ -142,10 +159,10 @@ dicionarioClasulasPassoUm = gerarDictClasulaVariavel(1)
 imprimir_dicionario_linha_a_linha(dicionarioClasulasPassoUm)
 
 # gerar clasulas que para cada quadrado do 8 puzzle deve assumir um valor
-#listaPodeTerUmValor = gerarListaClasulasPeloMenosUm(dicionarioClasulasPassoUm)
+listaPodeTerUmValor = gerarListaClasulasPeloMenosUm(dicionarioClasulasPassoUm)
 
 # gerar clasulas que para cada quadrado do 8 puzzle so pode ter exclusivamente um valor
-#listaPodeSoUmValor = gerarListaClasulasSoPodeUm(listaPodeTerUmValor)
+listaPodeSoUmValor = gerarListaClasulasSoPodeUm(listaPodeTerUmValor)
 
 
 # gera clasulas para que no tabuleiro, um valor deva assumir a posicao em algum quadrado
@@ -153,7 +170,7 @@ listaCadaValorAssumeEmTabuleiro = gerarListaClasulasValorDeveAssumirUm(dicionari
 
 # gera clasula para que no tabuleiro so exista valoroes unicos
 # (nao repetir o valor 2  em 2 ou mais quadrados por exemplo)
-
+listaSoPodeUmValorTabuleiro = gerarListaClasulasSoPodeUmTabuleiro(listaCadaValorAssumeEmTabuleiro)
 
 
 
@@ -176,11 +193,19 @@ listaCadaValorAssumeEmTabuleiro = gerarListaClasulasValorDeveAssumirUm(dicionari
 # print("----------------------------------------------------")
 
 
-print("----------------------------------------------------")
-print("Impimindo as clasulas que cada valor assume um quadrado em tabuleiro")
-for aa in listaCadaValorAssumeEmTabuleiro:
-   print(aa)
-print("----------------------------------------------------")
+# print("----------------------------------------------------")
+# print("Impimindo as clasulas que cada valor assume um quadrado em tabuleiro")
+# for aa in listaCadaValorAssumeEmTabuleiro:
+#    print(aa)
+# print("----------------------------------------------------")
+
+
+# print("----------------------------------------------------")
+# print("Impimindo as clasulas que cada valor assume apenas um quadrado em tabuleiro")
+# for aa in listaSoPodeUmValorTabuleiro:
+#    print(aa)
+# print("----------------------------------------------------")
+
 
 
 # fomato do git hub para add clasula
