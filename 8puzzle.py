@@ -1,7 +1,7 @@
 from pysat.solvers import Glucose3
 
 #deixando os tamanhos maximos de tabuleiro, do valor usado e movimentações
-contador = 0
+contador = 1
 VALOR_MAXIMO = 9
 TAMANHO_MAXIMO = 3
 ADJACENCIAS = {
@@ -48,6 +48,24 @@ def gerarDictClasulaVariavel(passo):
                 contador+=1
         
     return auxDicionario
+
+
+# Gerar as ações que pode fazer
+def gerarDictAcoes(passo):
+  auxDicionario = {}
+
+  global contador
+  auxDicionario.update( {f"{passo}_A_C" : (contador+0) })
+  auxDicionario.update( {f"{passo}_A_B" : (contador+1) })
+  auxDicionario.update( {f"{passo}_A_D" : (contador+2) })
+  auxDicionario.update( {f"{passo}_A_E" : (contador+3) })
+  
+  
+  contador += 3
+  
+  return auxDicionario
+
+
 
 #  funcao para definir que cada quadradinho tem que assumir um valor ao menos
 def gerarListaClasulasPeloMenosUm(dicionarioClasulas):
@@ -119,6 +137,7 @@ def gerarListaClasulasSoPodeUmTabuleiro(clasulas):
 
 
 
+
             
 
 
@@ -164,6 +183,9 @@ def imprimirRestricoes(lista, texto):
 # gera o dicionario passo1
 dicionarioClasulasPassoUm = gerarDictClasulaVariavel(1)  
 
+# gera o dicionario dass acoes passo1
+dicionarioAcao = gerarDictAcoes(1)
+
 # gerar clasulas que para cada quadrado do 8 puzzle deve assumir um valor
 listaPodeTerUmValor = gerarListaClasulasPeloMenosUm(dicionarioClasulasPassoUm)
 
@@ -180,14 +202,17 @@ listaSoPodeUmValorTabuleiro = gerarListaClasulasSoPodeUmTabuleiro(listaCadaValor
 
 
 
-
 # prints de cada função para verificar
-imprimirDicionarioLinhaLinha(dicionarioClasulasPassoUm)
+imprimirDicionarioLinhaLinha(dicionarioClasulasPassoUm,"Dicionario das clasulas")
 
 imprimirRestricoes(listaPodeTerUmValor,"Impimindo as clasulas de pode ter um valor")
 imprimirRestricoes(listaPodeSoUmValor,"Impimindo as clasulas de so pode ter um valor")
 imprimirRestricoes(listaCadaValorAssumeEmTabuleiro, "Impimindo as clasulas que cada valor assume um quadrado em tabuleiro")
 imprimirRestricoes(listaSoPodeUmValorTabuleiro,"Impimindo as clasulas que cada valor assume apenas um quadrado em tabuleiro")
+
+imprimirDicionarioLinhaLinha(dicionarioAcao,"Dicionario ações")
+print(contador)
+
 
 
 
