@@ -1,6 +1,7 @@
 from pysat.solvers import Glucose3
 
 #deixando os tamanhos maximos de tabuleiro, do valor usado e movimentações
+contador = 0
 VALOR_MAXIMO = 9
 TAMANHO_MAXIMO = 3
 ADJACENCIAS = {
@@ -20,17 +21,22 @@ g = Glucose3()
 
 
 # adiciona a clasula ao glucose
-def addClasulasEmGlucose(lista):
-   contador = 0
+def addRestricoesGlucose(lista):
    for clasula in lista:
-      contador+=1
       g.add_clause(clasula)
-      
+    
+
+def addClasulasGlucose(dicionario):
+   for valor in dicionario.values():
+      g.add_clause([valor])
+
+ 
 
 # gera as clasulas e armazena em um dicionario
 def gerarDictClasulaVariavel(passo):
     auxDicionario = {}
-    contador = 1
+
+    global contador
 
     for k in range(VALOR_MAXIMO):
         for i in range(TAMANHO_MAXIMO):
@@ -77,13 +83,13 @@ def gerarListaClasulasSoPodeUm(clasulas):
       
 
 # funcao para definir que cada valor precisa assumir algum quadrado
-def gerarListaClasulasValorDeveAssumirUm(dicionario):
+def gerarListaClasulasValorDeveAssumirUm(dicionario,passo):
   listaClasulasNovas = []
   for i in range(VALOR_MAXIMO):
     auxCriarClasula = []
     for j in range(TAMANHO_MAXIMO):
       for k in range(TAMANHO_MAXIMO):
-        auxChaveDic = "1_P_{}_{}_{}".format(j+1,k+1,i)
+        auxChaveDic = "{}_P_{}_{}_{}".format(passo,j+1,k+1,i)
         auxObterValor = dicionario[auxChaveDic]
         auxCriarClasula.append(auxObterValor)    
     listaClasulasNovas.append(auxCriarClasula)
@@ -166,7 +172,7 @@ listaPodeSoUmValor = gerarListaClasulasSoPodeUm(listaPodeTerUmValor)
 
 
 # gera clasulas para que no tabuleiro, um valor deva assumir a posicao em algum quadrado
-listaCadaValorAssumeEmTabuleiro = gerarListaClasulasValorDeveAssumirUm(dicionarioClasulasPassoUm)
+listaCadaValorAssumeEmTabuleiro = gerarListaClasulasValorDeveAssumirUm(dicionarioClasulasPassoUm,1)
 
 # gera clasula para que no tabuleiro so exista valoroes unicos
 # (nao repetir o valor 2  em 2 ou mais quadrados por exemplo)
@@ -176,35 +182,34 @@ listaSoPodeUmValorTabuleiro = gerarListaClasulasSoPodeUmTabuleiro(listaCadaValor
 
 
 
-
 # prints de cada função para verificar
 
-# print("----------------------------------------------------")
-# print("Impimindo as clasulas de pode ter um valor")
-# for aa in listaPodeTerUmValor:
-#    print(aa)
-# print("----------------------------------------------------")
+print("----------------------------------------------------")
+print("Impimindo as clasulas de pode ter um valor")
+for aa in listaPodeTerUmValor:
+   print(aa)
+print("----------------------------------------------------")
 
 
-# print("----------------------------------------------------")
-# print("Impimindo as clasulas de so pode ter um valor")
-# for aa in listaPodeSoUmValor:
-#    print(aa)
-# print("----------------------------------------------------")
+print("----------------------------------------------------")
+print("Impimindo as clasulas de so pode ter um valor")
+for aa in listaPodeSoUmValor:
+   print(aa)
+print("----------------------------------------------------")
 
 
-# print("----------------------------------------------------")
-# print("Impimindo as clasulas que cada valor assume um quadrado em tabuleiro")
-# for aa in listaCadaValorAssumeEmTabuleiro:
-#    print(aa)
-# print("----------------------------------------------------")
+print("----------------------------------------------------")
+print("Impimindo as clasulas que cada valor assume um quadrado em tabuleiro")
+for aa in listaCadaValorAssumeEmTabuleiro:
+   print(aa)
+print("----------------------------------------------------")
 
 
-# print("----------------------------------------------------")
-# print("Impimindo as clasulas que cada valor assume apenas um quadrado em tabuleiro")
-# for aa in listaSoPodeUmValorTabuleiro:
-#    print(aa)
-# print("----------------------------------------------------")
+print("----------------------------------------------------")
+print("Impimindo as clasulas que cada valor assume apenas um quadrado em tabuleiro")
+for aa in listaSoPodeUmValorTabuleiro:
+   print(aa)
+print("----------------------------------------------------")
 
 
 
