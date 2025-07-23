@@ -127,27 +127,30 @@ def gerarListaClasulasSoPodeUmTabuleiro(clasulas):
 
 # funcao auxiliar, apenas representativo
 
-def imprimir_dicionario_linha_a_linha(meu_dicionario):
-  """
-  Imprime cada par de chave e valor de um dicionário em uma nova linha.
+def imprimirDicionarioLinhaLinha(dicionario, texto):
 
-  Argumentos:
-    meu_dicionario (dict): O dicionário a ser impresso.
-  """
-  if not isinstance(meu_dicionario, dict):
+  if not isinstance(dicionario, dict):
     print("Erro: O argumento fornecido não é um dicionário.")
     return
 
-  if not meu_dicionario:
+  if not dicionario:
     print("O dicionário está vazio.")
     return
 
   print("--- Conteúdo do Dicionário ---")
-  for chave, valor in meu_dicionario.items():
+  print(f"--- {texto} ---")
+  for chave, valor in dicionario.items():
     # Usamos uma f-string para formatar a saída de forma clara
     print(f"Chave: {chave} | Valor: {valor}")
   print("-----------------------------")
 
+
+def imprimirRestricoes(lista, texto):
+  print("----------------------------------------------------")
+  print(texto)
+  for aa in lista:
+    print(aa)
+  print("----------------------------------------------------")
 
 
 
@@ -160,9 +163,6 @@ def imprimir_dicionario_linha_a_linha(meu_dicionario):
 
 # gera o dicionario passo1
 dicionarioClasulasPassoUm = gerarDictClasulaVariavel(1)  
-
-# imprimir 
-imprimir_dicionario_linha_a_linha(dicionarioClasulasPassoUm)
 
 # gerar clasulas que para cada quadrado do 8 puzzle deve assumir um valor
 listaPodeTerUmValor = gerarListaClasulasPeloMenosUm(dicionarioClasulasPassoUm)
@@ -181,35 +181,13 @@ listaSoPodeUmValorTabuleiro = gerarListaClasulasSoPodeUmTabuleiro(listaCadaValor
 
 
 
-
 # prints de cada função para verificar
+imprimirDicionarioLinhaLinha(dicionarioClasulasPassoUm)
 
-print("----------------------------------------------------")
-print("Impimindo as clasulas de pode ter um valor")
-for aa in listaPodeTerUmValor:
-   print(aa)
-print("----------------------------------------------------")
-
-
-print("----------------------------------------------------")
-print("Impimindo as clasulas de so pode ter um valor")
-for aa in listaPodeSoUmValor:
-   print(aa)
-print("----------------------------------------------------")
-
-
-print("----------------------------------------------------")
-print("Impimindo as clasulas que cada valor assume um quadrado em tabuleiro")
-for aa in listaCadaValorAssumeEmTabuleiro:
-   print(aa)
-print("----------------------------------------------------")
-
-
-print("----------------------------------------------------")
-print("Impimindo as clasulas que cada valor assume apenas um quadrado em tabuleiro")
-for aa in listaSoPodeUmValorTabuleiro:
-   print(aa)
-print("----------------------------------------------------")
+imprimirRestricoes(listaPodeTerUmValor,"Impimindo as clasulas de pode ter um valor")
+imprimirRestricoes(listaPodeSoUmValor,"Impimindo as clasulas de so pode ter um valor")
+imprimirRestricoes(listaCadaValorAssumeEmTabuleiro, "Impimindo as clasulas que cada valor assume um quadrado em tabuleiro")
+imprimirRestricoes(listaSoPodeUmValorTabuleiro,"Impimindo as clasulas que cada valor assume apenas um quadrado em tabuleiro")
 
 
 
