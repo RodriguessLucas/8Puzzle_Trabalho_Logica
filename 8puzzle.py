@@ -120,7 +120,7 @@ def gerarListaClasulasValorDeveAssumirUm(dicionario,passo):
       
 
 # funcao para definir que cada valor so pode assumir um quadrado apenas
-def gerarListaClasulasSoPodeUmTabuleiro(clasulas):
+def gerarListaClasulasValorUnicoPorTabuleiro(clasulas):
   listaNovasClasulas = []
   tamanhoClasula = len(clasulas[0])
 
@@ -189,36 +189,40 @@ def main():
   for i in range(20):
     # gera o dicionario passo1
     dictClasulas  = gerarDictClasulaVariavel(dictClasulas, i)
-    listaClasulas = []
+    
 
     # gera o dicionario dass acoes passo1
     dictClasulas = gerarDictAcoes(dictClasulas,i)
 
     # gerar clasulas que para cada quadrado do 8 puzzle deve assumir um valor
     listaPodeTerUmValor = gerarListaClasulasPeloMenosUm(dictClasulas,i)
+    listaRestricoes = [*listaRestricoes, *listaPodeTerUmValor]
 
     # gerar clasulas que para cada quadrado do 8 puzzle so pode ter exclusivamente um valor
     listaPodeSoUmValor = gerarListaClasulasSoPodeUm(listaPodeTerUmValor)
+    listaRestricoes = [*listaRestricoes, *listaPodeSoUmValor]
 
 
-  # gera clasulas para que no tabuleiro, um valor deva assumir a posicao em algum quadrado
-  listaCadaValorAssumeEmTabuleiro = gerarListaClasulasValorDeveAssumirUm(dicionarioClasulasPassoUm,1)
+    # gera clasulas para que no tabuleiro, um valor deva assumir a posicao em algum quadrado
+    listaCadaValorAssumeEmTabuleiro = gerarListaClasulasValorDeveAssumirUm(dicionario=dictClasulas,passo = 1)
+    listaRestricoes = [*listaRestricoes, *listaCadaValorAssumeEmTabuleiro]
 
-  # gera clasula para que no tabuleiro so exista valoroes unicos
-  # (nao repetir o valor 2  em 2 ou mais quadrados por exemplo)
-  listaSoPodeUmValorTabuleiro = gerarListaClasulasSoPodeUmTabuleiro(listaCadaValorAssumeEmTabuleiro)
+    # gera clasula para que no tabuleiro so exista valoroes unicos
+    # (nao repetir o valor 2  em 2 ou mais quadrados por exemplo)
+    listaSoPodeUmValorTabuleiro = gerarListaClasulasValorUnicoPorTabuleiro(listaCadaValorAssumeEmTabuleiro)
+    listaRestricoes = [*listaRestricoes, *listaSoPodeUmValorTabuleiro]
 
 
 
-  # prints de cada função para verificar
-  imprimirDicionarioLinhaLinha(dicionarioClasulasPassoUm,"Dicionario das clasulas")
+    # prints de cada função para verificar
+    imprimirDicionarioLinhaLinha(dictClasulas,"Dicionario das clasulas e acções")
 
-  imprimirRestricoes(listaPodeTerUmValor,"Impimindo as clasulas de pode ter um valor")
-  imprimirRestricoes(listaPodeSoUmValor,"Impimindo as clasulas de so pode ter um valor")
-  imprimirRestricoes(listaCadaValorAssumeEmTabuleiro, "Impimindo as clasulas que cada valor assume um quadrado em tabuleiro")
-  imprimirRestricoes(listaSoPodeUmValorTabuleiro,"Impimindo as clasulas que cada valor assume apenas um quadrado em tabuleiro")
+    imprimirRestricoes(listaPodeTerUmValor,"Impimindo as clasulas de pode ter um valor")
+    imprimirRestricoes(listaPodeSoUmValor,"Impimindo as clasulas de so pode ter um valor")
+    imprimirRestricoes(listaCadaValorAssumeEmTabuleiro, "Impimindo as clasulas que cada valor assume um quadrado em tabuleiro")
+    imprimirRestricoes(listaSoPodeUmValorTabuleiro,"Impimindo as clasulas que cada valor assume apenas um quadrado em tabuleiro")
 
-  imprimirDicionarioLinhaLinha(dicionarioAcao,"Dicionario ações")
+    
 
 
 main()
