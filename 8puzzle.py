@@ -33,9 +33,9 @@ def addClasulasGlucose(dicionario):
  
 
 # gera as clasulas e armazena em um dicionario
-def gerarDictClasulaVariavel(auxDicionario,passo):
+def gerarDictClasulaVariavel(passo):
     global contador
-
+    auxDicionario = {}
     for k in range(VALOR_MAXIMO):
         for i in range(TAMANHO_MAXIMO):
             for j in range(TAMANHO_MAXIMO):
@@ -49,15 +49,17 @@ def gerarDictClasulaVariavel(auxDicionario,passo):
 
 
 # Gerar as ações que pode fazer
-def gerarDictAcoes(auxDicionario,passo):
+def gerarDictAcoes(passo):
   global contador
+  auxDicionario = {}
+
   auxDicionario.update( {f"{passo}_A_C" : (contador+0) })
   auxDicionario.update( {f"{passo}_A_B" : (contador+1) })
   auxDicionario.update( {f"{passo}_A_D" : (contador+2) })
   auxDicionario.update( {f"{passo}_A_E" : (contador+3) })
   
   
-  contador += 3
+  contador += 4
 
   addClasulasGlucose(auxDicionario)
   
@@ -66,13 +68,13 @@ def gerarDictAcoes(auxDicionario,passo):
 
 
 #  funcao para definir que cada quadradinho tem que assumir um valor ao menos
-def gerarListaClasulasPeloMenosUm(dicionarioClasulas):
+def gerarListaClasulasPeloMenosUm(dicionarioClasulas,passo):
   listaClasulas = []
   for i in range(TAMANHO_MAXIMO):
     for j in range(TAMANHO_MAXIMO):
       auxClasula = []
       for k in range(VALOR_MAXIMO):
-        auxChaveEncontrar = "1_P_{}_{}_{}".format(i+1,j+1,k)
+        auxChaveEncontrar = "{}_P_{}_{}_{}".format(passo,i+1,j+1,k)
         auxValorClasula = dicionarioClasulas[auxChaveEncontrar]
         auxClasula.append(auxValorClasula)
       listaClasulas.append(auxClasula)
@@ -163,18 +165,34 @@ def imprimirDicionarioLinhaLinha(dicionario, texto):
 
   print("--- Conteúdo do Dicionário ---")
   print(f"--- {texto} ---")
+  auxContador = 1
   for chave, valor in dicionario.items():
-    # Usamos uma f-string para formatar a saída de forma clara
-    print(f"Chave: {chave} | Valor: {valor}")
-  print("-----------------------------")
+    print(f"Chave: {chave} | Valor: {valor}", end =" -- ")
+    if(auxContador % 5 == 0):
+      print("\n")
+      auxContador = 0
+    auxContador +=1
+  print("\n-----------------------------")
 
 
 def imprimirRestricoes(lista, texto):
   print("----------------------------------------------------")
   print(texto)
-  for aa in lista:
-    print(aa)
-  print("----------------------------------------------------")
+
+  if(len(lista) <= 10):
+    for aa in lista:
+      print(aa)
+  else:
+    auxContador = 1
+    for aa in lista:
+      print(aa, end=" ")
+      if(auxContador % 5 == 0):
+        print("\n")
+        auxContador = 0
+      auxContador +=1
+
+  
+  print("\n----------------------------------------------------")
 
 
 
@@ -186,16 +204,17 @@ def main():
 
   #dar uma organizada melhor nisso
 
-  for i in range(20):
+  for i in range(1,3):
     # gera o dicionario passo1
-    dictClasulas  = gerarDictClasulaVariavel(dictClasulas, i)
-    
+    dictClasulasPosicoes = gerarDictClasulaVariavel(i)
+    dictClasulas = {*dictClasulas, * dictClasulasPosicoes}
 
     # gera o dicionario dass acoes passo1
-    dictClasulas = gerarDictAcoes(dictClasulas,i)
+    dictClasulasAcoes = gerarDictAcoes(i)
+    dictClasulas = {*dictClasulas, *dictClasulasAcoes}
 
-    # gerar clasulas que para cada quadrado do 8 puzzle deve assumir um valor
-    listaPodeTerUmValor = gerarListaClasulasPeloMenosUm(dictClasulas,i)
+    #gerar clasulas que para cada quadrado do 8 puzzle deve assumir um valor
+    listaPodeTerUmValor = gerarListaClasulasPeloMenosUm(dictClasulasPosicoes,i)
     listaRestricoes = [*listaRestricoes, *listaPodeTerUmValor]
 
     # gerar clasulas que para cada quadrado do 8 puzzle so pode ter exclusivamente um valor
@@ -204,7 +223,7 @@ def main():
 
 
     # gera clasulas para que no tabuleiro, um valor deva assumir a posicao em algum quadrado
-    listaCadaValorAssumeEmTabuleiro = gerarListaClasulasValorDeveAssumirUm(dicionario=dictClasulas,passo = 1)
+    listaCadaValorAssumeEmTabuleiro = gerarListaClasulasValorDeveAssumirUm(dicionario=dictClasulasPosicoes,passo = i)
     listaRestricoes = [*listaRestricoes, *listaCadaValorAssumeEmTabuleiro]
 
     # gera clasula para que no tabuleiro so exista valoroes unicos
@@ -215,7 +234,8 @@ def main():
 
 
     # prints de cada função para verificar
-    imprimirDicionarioLinhaLinha(dictClasulas,"Dicionario das clasulas e acções")
+    imprimirDicionarioLinhaLinha(dictClasulasPosicoes,"Dicionario das clasulas")
+    imprimirDicionarioLinhaLinha(dictClasulasAcoes,"Dicionario das ações")
 
     imprimirRestricoes(listaPodeTerUmValor,"Impimindo as clasulas de pode ter um valor")
     imprimirRestricoes(listaPodeSoUmValor,"Impimindo as clasulas de so pode ter um valor")
